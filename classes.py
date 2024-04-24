@@ -1,3 +1,5 @@
+import time
+
 class Node:
     def __init__(self, position, parentNode):
         self.x = position[0]
@@ -79,15 +81,16 @@ class BFS:
                 newNode = Node(parentNode=currentNode, position=positionToCheck)
                 self.frontier.append(newNode)
                 if newNode.position() == self.goalPosition: # then that is the goal node and the solution path is returned
+                    endTime = time.time()
                     done = True
                     solution = self.getSolutionPath(currentNode=newNode)
                     self.visited.append(self.frontier.getNode())
                     self.frontier.remove()
-                    return done, solution
+                    return done, solution, endTime
         
         # goaL not found, add node to visited and move  to next node
         self.visited.Queue.append(currentNode)
         self.frontier.remove()
         done = False
         solution = []
-        return done, []
+        return done, [], 0

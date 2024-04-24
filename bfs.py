@@ -1,12 +1,20 @@
-# python3 bfs.py --mazeFile=maze_1.csv
+# python3 bfs.py --mazeFile=maze_20.csv
 
+## TRY MAZE_20
+'''
+TODO:
+    1. allow user to run program without showing animation to get lowest time
+'''
 # TODO: Print size of solution after it is found
 
-import time, csv, argparse
+
+import argparse 
+import time 
+import random
 import pygame
 import numpy as np
 
-from classes import BFS , Queue, Node, isValidMove
+from classes import BFS
 
 black = (44,43,42)          # 0: wall colors
 grey = (219, 218, 219)      # 1: Unsearched nodes
@@ -37,13 +45,20 @@ if __name__ == "__main__":
 
     '''
 
-    startTime = time.time()
 
     # parsing user input
-    # example: python3 bfs.py --mazeFile=maze_1.csv
+    # example: python3 bfs.py --mazeFile=maze_20.csv
+    mazeString = "maze_"
+    mazeNum = random.randint(1,30)
+    mazeNum-=1
+
+    randomMaze = mazeString + str(mazeNum) + ".csv"
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mazeFile", help="filename (csv) of the maze to load.", default="maze_0.csv", type=str)
+    parser.add_argument("--mazeFile", help="filename (csv) of the maze to load.", default=randomMaze, type=str)
     args = parser.parse_args()
+
+    startTime = time.time()
 
     mazeAddress = "mazes/" + args.mazeFile
     grid = np.genfromtxt(mazeAddress, delimiter=',').astype(np.int64)
@@ -100,7 +115,8 @@ if __name__ == "__main__":
         pygame.display.flip() # pygame stuff
 
         if running == True:
-            done,solution = bfs.getSuccessors(grid=grid)
+            done,solution,algorithmEndTime = bfs.getSuccessors(grid=grid)
+
             
             frontier = [node.position() for node in bfs.frontier.Queue]
             visited = [node.position() for node in bfs.visited.Queue] 
@@ -114,18 +130,18 @@ if __name__ == "__main__":
             for node in solution:
                 position = node.position()
                 grid[position[0], position[1]] = 5
-            screen.fill(grey)
-            grid[0, 0] = 2
-            grid[-1, -1] = 3
+                screen.fill(grey)
+                grid[0, 0] = 2
+                grid[-1, -1] = 3
 
-            for currentRow in range(numRows):
-                for currentColumn in range(numColumns):
-                    tileColor = colorsList[grid[currentRow, currentColumn]]
-                    pygame.draw.rect(screen, tileColor,  [width* currentColumn, height * currentRow, width, height])
+                for currentRow in range(numRows):
+                    for currentColumn in range(numColumns):
+                        tileColor = colorsList[grid[currentRow, currentColumn]]
+                        pygame.draw.rect(screen, tileColor,  [width* currentColumn, height * currentRow, width, height])
 
-            #change fps to 45
-            clock.tick(45)
-            pygame.display.flip() # pygame stuff
+                #change fps to 45
+                clock.tick(45)
+                pygame.display.flip() # pygame stuff
 
     while not closeWindow:
         for currentEvent in pygame.event.get():
@@ -134,4 +150,17 @@ if __name__ == "__main__":
             elif currentEvent.type == pygame.QUIT:
                 closeWindow = True  
 
-    pygame.quit()      
+    animationEndTime = time.time()
+    print(f"BFS Algoirthm Found Path In {algorithmEndTime-startTime:.3f}s")
+    print(f"BFS Animation Found Path In {animationEndTime-startTime:.3f}s")
+
+    print(f"Solution path is {len(solution)} nodes long")
+
+
+    ''' For printing all nodes in solution[]
+    for node in solution:
+        print(node.position())
+        print(',')
+    '''
+
+    pygame.quit()
