@@ -15,7 +15,7 @@ class Queue:
         self.Queue = []
 
     def __len__(self):
-        return len(Queue)
+        return len(self.Queue)
 
     def append(self, node):
         self.Queue.append(node)
@@ -28,7 +28,7 @@ class Queue:
 
 
 # checks if the position passed in is a valid move or not
-def isValidMove(position, gridDimension):
+def isValidMove(position):
     (x,y) = position
     xValid = (x<=40) & (x>=0) # if x is is within grid dimensions and that it does not go backwards
     yValid = (y<=40) & (y>=0) # if y is is within grid dimensions and that it does not go backwards
@@ -41,8 +41,8 @@ def isValidMove(position, gridDimension):
 
 class BFS:
     def __init__(self, startPosition, goalPosition, gridDimension):
-        self.explored = Queue()
         self.frontier = Queue()
+        self.visited = Queue()
 
         # Root node initialized and added to frontier
         node = Node(position=startPosition, parentNode=None)
@@ -55,8 +55,10 @@ class BFS:
     # method that is ran only when the currentNode is the goal node
     def getSolutionPath(self, currentNode):
         solutionPath=[]
-        while currentNode.parent != None:
+        while currentNode.parentNode != None:
             solutionPath.append(currentNode)
+            currentNode = currentNode.parentNode
+        return solutionPath
     
     def getSuccessors(self, grid):
         currentNode = self.frontier.getNode()
@@ -79,13 +81,13 @@ class BFS:
                 if newNode.position() == self.goalPosition: # then that is the goal node and the solution path is returned
                     done = True
                     solution = self.getSolutionPath(currentNode=newNode)
-                    self.explored.append(self.frontier.getNode())
+                    self.visited.append(self.frontier.getNode())
                     self.frontier.remove()
-                    return solution,done
+                    return done, solution
         
-        # goaL not found, add node to explored and move  to next node
-        self.explored.Queue.append(currentNode)
+        # goaL not found, add node to visited and move  to next node
+        self.visited.Queue.append(currentNode)
         self.frontier.remove()
         done = False
-        NoSolution = []
-        return NoSolution, done
+        solution = []
+        return done, []
