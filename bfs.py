@@ -14,7 +14,7 @@ import random
 import pygame
 import numpy as np
 
-from classes import BFS
+from bfsClasses import BFS
 
 black = (44,43,42)          # 0: wall colors
 grey = (219, 218, 219)      # 1: Unsearched nodes
