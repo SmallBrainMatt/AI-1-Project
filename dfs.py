@@ -1,4 +1,6 @@
 # python3 dfs.py --mazeFile=maze_20.csv
+## TRY MAZE_20
+## TRY MAZE_2
 
 import argparse 
 import time 
@@ -20,33 +22,17 @@ yellow = (239, 249, 40)     # 6: frontier nodes
 colorsList = [black, grey, green, red, orange, maroon, yellow]
 
 if __name__ == "__main__":
-
-    ''' Testing stuff
-    print("length of grid= " + str(len(grid)))
-    print("num of columns= " + str(len(grid[0])))
-
-    print("start position: " + str(start_pos))
-    print("goal position: " + str(goal_pos))
-    print(gridDimension)
-
-    print(grid)
-
-    '''
-
-
-    # parsing user input
-    # example: python3 dfs.py --mazeFile=maze_20.csv
     mazeString = "maze_"
     mazeNum = random.randint(1,30)
-    mazeNum-=1
+    mazeNum-=1 # because there are 29 mazes in folder
 
     randomMaze = mazeString + str(mazeNum) + ".csv"
 
+    # parsing user input
+    # example: python3 dfs.py --mazeFile=maze_20.csv
     parser = argparse.ArgumentParser()
     parser.add_argument("--mazeFile", help="filename (csv) of the maze to load.", default=randomMaze, type=str)
     args = parser.parse_args()
-
-    startTime = time.time()
 
     mazeAddress = "mazes/" + args.mazeFile
     grid = np.genfromtxt(mazeAddress, delimiter=',').astype(np.int64)
@@ -57,10 +43,14 @@ if __name__ == "__main__":
     # Start position will always be top left
     startPosition = (0,0)
 
-    #goal position will always be bottom right
+    '''
+        Can set different goalPosition if wanted
+    '''
     goalPosition = (numRows-1, numColumns-1)
+    #goalPosition = (random.randint(20,40), random.randint(20,40))
+    #print("goal position " + str(goalPosition))
 
-    # Changing g
+    # Changing start and goal location values for parsing
     grid[0, 0] = 2      # start = 2
     grid[-1, -1] = 3    # goal = 3
     gridDimension = (numRows-1, numColumns-1)
@@ -80,3 +70,75 @@ if __name__ == "__main__":
 
     # FPS manager
     clock = pygame.time.Clock() 
+
+    # DFS imported from dfscClasses.py 
+    dfs = DFS(startPosition=startPosition, goalPosition=goalPosition)
+
+    startTime = time.time()
+
+   # if a key is pressed pygame runs if quit is inputted then the window closes
+    while not done:
+        for currentEvent in pygame.event.get():
+            if currentEvent.type == pygame.KEYDOWN:
+                running = True
+            elif currentEvent.type == pygame.QUIT:
+                done = True
+        screen.fill(grey)
+        for currentRow in range(numRows):
+            for currentColumn in range(numColumns):
+                tileColor = colorsList[grid[currentRow, currentColumn]]
+                pygame.draw.rect(screen, tileColor,  [width* currentColumn, height * currentRow, width, height])
+        
+        #change fps to 45
+        clock.tick(45)
+
+        pygame.display.flip() # pygame stuff
+
+        if running == True:
+            done,solution,algorithmEndTime = dfs.getSuccessors(grid=grid)
+
+            frontier = [node.position() for node in dfs.frontier]
+            visited = dfs.visited
+
+
+            print([str(node) for node in frontier])
+            for position in frontier:
+                    grid[position[0], position[1]] = 6
+            for position in visited:
+                    grid[position[0], position[1]] = 4
+        if done == True:
+            for node in solution:
+                position = node.position()
+                grid[position[0], position[1]] = 5
+                screen.fill(grey)
+                grid[0, 0] = 2
+                grid[goalPosition] = 3
+
+                for currentRow in range(numRows):
+                    for currentColumn in range(numColumns):
+                        tileColor = colorsList[grid[currentRow, currentColumn]]
+                        pygame.draw.rect(screen, tileColor,  [width* currentColumn, height * currentRow, width, height])
+
+                #change fps to 45
+                clock.tick(45)
+                pygame.display.flip() # pygame stuff
+                animationEndTime = time.time()
+
+    while not closeWindow:
+        for currentEvent in pygame.event.get():
+            if currentEvent.type == pygame.KEYDOWN:
+                closeWindow = True
+            elif currentEvent.type == pygame.QUIT:
+                closeWindow = True  
+
+
+    print("\nGoal position: " + str(goalPosition))
+    print(f"DFS Algoirthm Found Path In {algorithmEndTime-startTime:.3f}s")
+    print(f"DFS Animation Found Path In {animationEndTime-startTime:.3f}s")
+
+    print(f"Solution path is {len(solution)} nodes long")
+    print(f"Nodes visited: {len(visited)}")
+
+    pygame.quit()
+
+    

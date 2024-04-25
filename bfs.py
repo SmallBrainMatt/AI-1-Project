@@ -157,6 +157,7 @@ if __name__ == "__main__":
     print(f"BFS Animation Found Path In {animationEndTime-startTime:.3f}s")
 
     print(f"Solution path is {len(solution)} nodes long")
+    print(f"Nodes visited: {len(visited)}")
 
 
     ''' For printing all nodes in solution[]
