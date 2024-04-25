@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # FPS manager
     clock = pygame.time.Clock() 
 
-    # BFS imported from classes.py 
+    # BFS imported from bfsClasses.py 
     bfs = BFS(startPosition=startPosition, goalPosition=goalPosition)
     
     startTime = time.time()
