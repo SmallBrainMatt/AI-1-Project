@@ -45,14 +45,14 @@ if __name__ == "__main__":
 
     '''
 
-    # parsing user input
-    # example: python3 bfs.py --mazeFile=maze_20.csv
     mazeString = "maze_"
     mazeNum = random.randint(1,30)
-    mazeNum-=1
+    mazeNum-=1 # because there are 29 mazes in folder
 
     randomMaze = mazeString + str(mazeNum) + ".csv"
 
+    # parsing user input
+    # example: python3 bfs.py --mazeFile=maze_20.csv
     parser = argparse.ArgumentParser()
     parser.add_argument("--mazeFile", help="filename (csv) of the maze to load.", default=randomMaze, type=str)
     args = parser.parse_args()
