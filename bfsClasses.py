@@ -62,7 +62,8 @@ class BFS:
         up=(0,1)
         down=(0, -1)
 
-        possibleMovements = [right,left,up,down]
+        # first movements checked are down then right then up then left
+        possibleMovements = [down,right,up,left]
 
         for movement in possibleMovements:
             # Sets moveX and moveY to each possible movement
@@ -75,13 +76,9 @@ class BFS:
                     endTime = time.time()
                     done = True
                     solution = self.getSolutionPath(currentNode=newNode)
-                    #self.visited.append(self.frontier.getNode())
-                    #self.frontier.remove()
                     return done, solution, endTime
         
         # goaL not found, add node to visited and move  to next node
-        #self.visited.Queue.append(currentNode)
-        #self.frontier.remove()
         self.visited.add(currentNode.position())
         done = False
         solution = []
