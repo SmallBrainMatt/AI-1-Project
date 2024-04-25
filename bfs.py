@@ -2,11 +2,7 @@
 
 ## TRY MAZE_20
 ## TRY MAZE_2
-'''
-TODO:
-    1. allow user to run program without showing animation to get lowest time
-'''
-# TODO: Print size of solution after it is found
+
 
 
 import argparse 
