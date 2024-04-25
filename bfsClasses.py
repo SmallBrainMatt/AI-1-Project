@@ -1,4 +1,5 @@
 import time
+from collections import deque
 
 class Node:
     def __init__(self, position, parentNode):
@@ -12,21 +13,6 @@ class Node:
     def position(self):
         return (self.x, self.y)
     
-class Queue:
-    def __init__(self):
-        self.Queue = []
-
-    def __len__(self):
-        return len(self.Queue)
-
-    def append(self, node):
-        self.Queue.append(node)
-
-    def getNode(self):
-        return self.Queue[0]
-
-    def remove(self):
-        self.Queue = self.Queue[1:len(self.Queue)]
 
 
 # checks if the position passed in is a valid move or not
@@ -42,15 +28,15 @@ def isValidMove(position):
 
 
 class BFS:
-    def __init__(self, startPosition, goalPosition, gridDimension):
-        self.frontier = Queue()
-        self.visited = Queue()
+    def __init__(self, startPosition, goalPosition):
+        self.frontier = deque()
+        self.visited = set()
 
         # Root node initialized and added to frontier
         node = Node(position=startPosition, parentNode=None)
         self.frontier.append(node)
 
-        self.gridDimension = gridDimension
+        #self.gridDimension = gridDimension
         self.startPosition = startPosition
         self.goalPosition = goalPosition
     
@@ -63,7 +49,10 @@ class BFS:
         return solutionPath
     
     def getSuccessors(self, grid):
-        currentNode = self.frontier.getNode()
+        # if there are no more nodes in the frontier then there is no solution, animation will represent that.
+        if not self.frontier:
+                return False, [], 0 
+        currentNode = self.frontier.popleft()
         x, y = currentNode.position()
 
         right=(1,0)
@@ -84,13 +73,14 @@ class BFS:
                     endTime = time.time()
                     done = True
                     solution = self.getSolutionPath(currentNode=newNode)
-                    self.visited.append(self.frontier.getNode())
-                    self.frontier.remove()
+                    #self.visited.append(self.frontier.getNode())
+                    #self.frontier.remove()
                     return done, solution, endTime
         
         # goaL not found, add node to visited and move  to next node
-        self.visited.Queue.append(currentNode)
-        self.frontier.remove()
+        #self.visited.Queue.append(currentNode)
+        #self.frontier.remove()
+        self.visited.add(currentNode.position())
         done = False
         solution = []
         return done, [], 0

@@ -1,6 +1,7 @@
 # python3 bfs.py --mazeFile=maze_20.csv
 
 ## TRY MAZE_20
+## TRY MAZE_2
 '''
 TODO:
     1. allow user to run program without showing animation to get lowest time
@@ -26,7 +27,6 @@ yellow = (239, 249, 40)     # 6: frontier nodes
 
 
 colorsList = [black, grey, green, red, orange, maroon, yellow]
-
 
 
 
@@ -58,8 +58,6 @@ if __name__ == "__main__":
     parser.add_argument("--mazeFile", help="filename (csv) of the maze to load.", default=randomMaze, type=str)
     args = parser.parse_args()
 
-    startTime = time.time()
-
     mazeAddress = "mazes/" + args.mazeFile
     grid = np.genfromtxt(mazeAddress, delimiter=',').astype(np.int64)
 
@@ -69,12 +67,18 @@ if __name__ == "__main__":
     # Start position will always be top left
     startPosition = (0,0)
 
-    #goal position will always be bottom right
-    goalPosition = (numRows-1, numColumns-1)
+    '''
+        Can set different goalPosition if you want
+    '''
+    #goalPosition = (numRows-1, numColumns-1)
+    goalPosition = (random.randint(20,40), random.randint(20,40))
+
+        
+    print("goal position " + str(goalPosition))
 
     # Changing g
     grid[0, 0] = 2      # start = 2
-    grid[-1, -1] = 3    # goal = 3
+    grid[goalPosition] = 3    # goal = 3
     gridDimension = (numRows-1, numColumns-1)
 
     # size of each tile 
@@ -94,8 +98,9 @@ if __name__ == "__main__":
     clock = pygame.time.Clock() 
 
     # BFS imported from classes.py 
-    bfs = BFS(startPosition=startPosition, goalPosition=goalPosition, gridDimension=grid)
-   
+    bfs = BFS(startPosition=startPosition, goalPosition=goalPosition)
+    
+    startTime = time.time()
     # if a key is pressed pygame runs if quit is inputted then the window closes
     while not done:
         for currentEvent in pygame.event.get():
@@ -118,21 +123,20 @@ if __name__ == "__main__":
             done,solution,algorithmEndTime = bfs.getSuccessors(grid=grid)
 
             
-            frontier = [node.position() for node in bfs.frontier.Queue]
-            visited = [node.position() for node in bfs.visited.Queue] 
+            frontier = [node.position() for node in bfs.frontier]
+            visited = bfs.visited
 
             for position in frontier:
                     grid[position[0], position[1]] = 6
             for position in visited:
                     grid[position[0], position[1]] = 4
         if done == True:
-
             for node in solution:
                 position = node.position()
                 grid[position[0], position[1]] = 5
                 screen.fill(grey)
                 grid[0, 0] = 2
-                grid[-1, -1] = 3
+                grid[goalPosition] = 3
 
                 for currentRow in range(numRows):
                     for currentColumn in range(numColumns):
@@ -142,6 +146,7 @@ if __name__ == "__main__":
                 #change fps to 45
                 clock.tick(45)
                 pygame.display.flip() # pygame stuff
+                animationEndTime = time.time()
 
     while not closeWindow:
         for currentEvent in pygame.event.get():
@@ -150,7 +155,6 @@ if __name__ == "__main__":
             elif currentEvent.type == pygame.QUIT:
                 closeWindow = True  
 
-    animationEndTime = time.time()
     print(f"BFS Algoirthm Found Path In {algorithmEndTime-startTime:.3f}s")
     print(f"BFS Animation Found Path In {animationEndTime-startTime:.3f}s")
 
@@ -162,5 +166,6 @@ if __name__ == "__main__":
         print(node.position())
         print(',')
     '''
+    print(goalPosition)
 
     pygame.quit()
