@@ -1,5 +1,7 @@
 import time
-from collections import deque
+
+# doubly ended queue: allows element appending and popping on both sides of the queue
+from collections import deque 
 
 class Node:
     def __init__(self, position, parentNode):
@@ -29,7 +31,7 @@ def isValidMove(position):
 
 class BFS:
     def __init__(self, startPosition, goalPosition):
-        self.frontier = deque()
+        self.frontier = deque() # doubly ended queue
         self.visited = set()
 
         # Root node initialized and added to frontier
