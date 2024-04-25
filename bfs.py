@@ -45,7 +45,6 @@ if __name__ == "__main__":
 
     '''
 
-
     # parsing user input
     # example: python3 bfs.py --mazeFile=maze_20.csv
     mazeString = "maze_"
@@ -68,13 +67,13 @@ if __name__ == "__main__":
     startPosition = (0,0)
 
     '''
-        Can set different goalPosition if you want
+        Can set different goalPosition if wanted
     '''
-    #goalPosition = (numRows-1, numColumns-1)
-    goalPosition = (random.randint(20,40), random.randint(20,40))
+    goalPosition = (numRows-1, numColumns-1)
+    #goalPosition = (random.randint(20,40), random.randint(20,40))
 
         
-    print("goal position " + str(goalPosition))
+  #  print("goal position " + str(goalPosition))
 
     # Changing g
     grid[0, 0] = 2      # start = 2
@@ -122,10 +121,11 @@ if __name__ == "__main__":
         if running == True:
             done,solution,algorithmEndTime = bfs.getSuccessors(grid=grid)
 
-            
             frontier = [node.position() for node in bfs.frontier]
             visited = bfs.visited
 
+
+            print([str(node) for node in frontier])
             for position in frontier:
                     grid[position[0], position[1]] = 6
             for position in visited:
@@ -155,6 +155,8 @@ if __name__ == "__main__":
             elif currentEvent.type == pygame.QUIT:
                 closeWindow = True  
 
+
+    print("\nGoal position: " + str(goalPosition))
     print(f"BFS Algoirthm Found Path In {algorithmEndTime-startTime:.3f}s")
     print(f"BFS Animation Found Path In {animationEndTime-startTime:.3f}s")
 
@@ -166,6 +168,4 @@ if __name__ == "__main__":
         print(node.position())
         print(',')
     '''
-    print(goalPosition)
-
     pygame.quit()

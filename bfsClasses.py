@@ -11,6 +11,9 @@ class Node:
 
     def __getitem__(self):
           return (self.x, self.y)
+    
+    def __str__(self):
+        return f"({self.x}, {self.y})"
 
     def position(self):
         return (self.x, self.y)
@@ -54,7 +57,7 @@ class BFS:
         # if there are no more nodes in the frontier then there is no solution, animation will represent that.
         if not self.frontier:
                 return False, [], 0 
-        currentNode = self.frontier.popleft()
+        currentNode = self.frontier.popleft() # popping left for First in First out
         x, y = currentNode.position()
 
         right=(1,0)
