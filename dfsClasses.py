@@ -3,6 +3,18 @@ import time
 # doubly ended queue: allows element appending and popping on both sides of the queue
 from collections import deque
 
+class Node:
+    def __init__(self, position, parentNode):
+        self.x = position[0]
+        self.y = position[1]
+        self.parentNode = parentNode
+
+    def __getitem__(self):
+          return (self.x, self.y)
+
+    def position(self):
+        return (self.x, self.y)
+    
 
 # checks if the position passed in is a valid move or not
 def isValidMove(position):
