@@ -71,7 +71,7 @@ if __name__ == "__main__":
         
   #  print("goal position " + str(goalPosition))
 
-    # Changing g
+    # Changing start and goal location values for parsing
     grid[0, 0] = 2      # start = 2
     grid[goalPosition] = 3    # goal = 3
     gridDimension = (numRows-1, numColumns-1)
