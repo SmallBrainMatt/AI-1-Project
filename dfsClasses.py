@@ -6,8 +6,8 @@ class Node:
         self.y = position[1]
         self.parentNode = parentNode
 
-    def __getitem__(self):
-          return (self.x, self.y)
+  #  def __getitem__(self):
+  #        return (self.x, self.y)
 
     def position(self):
         return (self.x, self.y)
@@ -59,7 +59,7 @@ class DFS:
         down=(0, -1)
 
         # first movements expanded are down, right, up , then left because of the stack
-        possibleMovements = reversed([down,right,up,left]) 
+        possibleMovements = [down,left,right,up]
 
         for movement in possibleMovements:
             # Sets moveX and moveY to each possible movement
