@@ -1,8 +1,5 @@
 import time
 
-# doubly ended queue: allows element appending and popping on both sides of the queue
-from collections import deque
-
 class Node:
     def __init__(self, position, parentNode):
         self.x = position[0]
@@ -28,7 +25,7 @@ def isValidMove(position):
     
 class DFS:
     def __init__(self, startPosition, goalPosition):
-        self.frontier = deque()
+        self.frontier = []
         self.visited = set()
         self.startPosition = startPosition
         self.goalPosition = goalPosition
@@ -61,8 +58,8 @@ class DFS:
         up=(0,1)
         down=(0, -1)
 
-        # first movements checked are down then right then up then left
-        possibleMovements = [down,right,up,left]
+        # first movements expanded are down, right, up , then left because of the stack
+        possibleMovements = reversed([down,right,up,left]) 
 
         for movement in possibleMovements:
             # Sets moveX and moveY to each possible movement
